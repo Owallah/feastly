@@ -10,3 +10,10 @@ export interface Meal {
 export interface MealResponse {
     meals: Meal[] | null
 }
+
+export interface Category {
+    idCategory: string;
+    strCategory: string;
+    strCategoryThumb: string;
+    strCategoryDescription: string;
+  }

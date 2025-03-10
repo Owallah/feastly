@@ -1,30 +1,58 @@
-import { create } from "zustand"
-import { Meal, MealResponse } from "../types/Meal"
-import axios from "axios"
-
+import { create } from "zustand";
+import { Category, Meal, MealResponse } from "../types/Meal";
+import axios from "axios";
 
 interface MealState {
-    meals: Meal[]
-    loading: boolean
-    error: string | null
-    fetchMeals: (query: string) => Promise<void>
-
+  meals: Meal[];
+  categories: Category[];
+  loading: boolean;
+  error: string | null;
+  selectedCategory: string | null;
+  fetchMeals: (query: string) => Promise<void>;
+  fetchCategories: () => Promise<void>;
+  setSelectedCategory: (category: string | null) => void;
 }
 
 const useMealsStore = create<MealState>((set) => ({
-    meals: [],
-    loading: false,
-    error: null,
+  meals: [],
+  categories: [],
+  loading: false,
+  error: null,
+  selectedCategory: null,
 
-    fetchMeals: async (query: string) => {
-        set({ loading: true, error: null})
-        try {
-            const response = await axios.get<MealResponse>(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`)
-            set({ meals: response.data.meals || [], loading: false})
-        } catch (error) {
-            set({ error: error instanceof Error ? error.message : "Error fetching meals", loading: false})
-        }
+  fetchMeals: async (query: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.get<MealResponse>(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
+      );
+      set({ meals: response.data.meals || [], loading: false });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "Error fetching meals",
+        loading: false,
+      });
     }
-}))
+  },
 
-export default useMealsStore
+  fetchCategories: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.get<{ categories: Category[] }>(
+        "https://www.themealdb.com/api/json/v1/1/categories.php"
+      );
+      set({ categories: response.data.categories, loading: false });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "An error occurred",
+        loading: false,
+      });
+    }
+  },
+
+  setSelectedCategory: (category: string | null) => {
+    set({ selectedCategory: category });
+  },
+}));
+
+export default useMealsStore;
