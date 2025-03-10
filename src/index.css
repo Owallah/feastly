@@ -1,0 +1,12 @@
+body {
+  background: rgb(29, 9, 31);
+  background: linear-gradient(
+    90deg,
+    rgba(29, 9, 31, 1) 34%,
+    rgba(247, 180, 75, 1) 100%
+  );
+}
+
+.container {
+  overflow: hidden;
+}
