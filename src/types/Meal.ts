@@ -17,3 +17,7 @@ export interface Category {
     strCategoryThumb: string;
     strCategoryDescription: string;
   }
+
+  export interface Area {
+    strArea: string
+  }

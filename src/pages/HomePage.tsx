@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../assets/styles/HomePage.css";
 import MealList from "../components/MealList";
 import useMealsStore from "../context/useMealsStore";
 import CategoryFilter from "../components/CategoryFilter";
 import MealCard from "../components/MealCard";
+import AreaFilter from "../components/AreaFilter";
 
 
 const HomePage = () => {
-    const { fetchCategories, fetchRandomMeal, randomMeal } = useMealsStore();
+    const { fetchCategories, fetchArea, fetchRandomMeal, randomMeal } = useMealsStore();
+    const [ searchString, setSearchString] = useState("")
 
     useEffect(() => {
       fetchCategories();
@@ -16,6 +18,11 @@ const HomePage = () => {
     useEffect(() => {
         fetchRandomMeal();
       }, [fetchRandomMeal])
+
+      //fetch area
+      useEffect(() => {
+        fetchArea();
+      }, [fetchArea])
 
     // useEffect(() => {
     //     const timer = setTimeout(() => {
@@ -28,7 +35,12 @@ const HomePage = () => {
   
   return <section className="home container">
     <h1>HomePage</h1>
-    <CategoryFilter />
+    <div className="flexCenter">
+        <input type="text" className="search-box" name="search" placeholder="Search Here..." value={searchString} onChange={(e)=> setSearchString(e.target.value)} id="" />
+        <CategoryFilter />
+        <AreaFilter />
+    </div>
+    
     
     {/* // random meal goes here */}
     {randomMeal.length > 0 && (
@@ -38,7 +50,7 @@ const HomePage = () => {
         </div>
       )}
 
-    <MealList query="" />
+    <MealList query={searchString} />
   </section>;
 };
 

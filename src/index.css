@@ -10,3 +10,15 @@ body {
 .container {
   overflow: hidden;
 }
+
+
+.flexCenter {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.search-box {
+  height: fit-content;
+  padding: .75rem;
+}
