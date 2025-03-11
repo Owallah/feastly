@@ -8,16 +8,18 @@ interface MealListProps {
 }
 
 const MealList: React.FC<MealListProps> = ({ query }) => {
-  const { meals, loading, error, fetchMeals, selectedCategory } = useMealsStore();
+  const { meals, loading, error, fetchMeals, selectedCategory, selectedArea } = useMealsStore();
 
   useEffect(() => {
     fetchMeals(query);
   }, [query, fetchMeals]);
 
   // Now we filter meals by selected category
-  const filteredMeals = selectedCategory
-    ? meals.filter((meal) => meal.strCategory === selectedCategory)
-    : meals;
+  const filteredMeals = meals.filter((meal) => {
+    const matchesCategory = selectedCategory ? meal.strCategory === selectedCategory : true
+    const matchesArea = selectedArea ? meal.strArea === selectedArea : true
+    return matchesCategory && matchesArea
+  })
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
